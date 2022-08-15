@@ -1,0 +1,31 @@
+.text-input-container {
+  margin-top: 7px;
+}
+
+.text-input-info-message,
+.text-input-error-message {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 17px;
+  margin-top: 4px;
+}
+
+.text-input-info-message {
+  color: #bfbfbf;
+}
+
+.text-input-error-message {
+  color: red;
+}
+
+.text-input,
+.text-input-error {
+  width: 100%;
+  height: 40px;
+}
+
+.text-input-error {
+  border: 1px solid red;
+}
