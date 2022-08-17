@@ -55,6 +55,7 @@ export default function Product(props) {
             Add to cart
           </Button>
         )}
+        <Link to={`/admin/product/${product._id}`}>Edit</Link>
       </Card.Body>
     </Card>
   );
