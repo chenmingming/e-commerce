@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import expressAsyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
-import { generateToken } from "../utils.js";
+import { generateToken, isAuth } from "../utils.js";
 
 const userRouter = express.Router();
 
@@ -18,6 +18,7 @@ userRouter.post(
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
+          cartItems: user.cartItems,
           token: generateToken(user),
         });
         return;
@@ -46,5 +47,56 @@ userRouter.post(
     });
   })
 );
+
+// userRouter.get(
+//   "/cart",
+//   isAuth,
+//   expressAsyncHandler(async (req, res) => {
+//     const user = await User.findById(req.user._id);
+//     if (user) {
+//       user.cartItems = req.body.cartItems.map((x) => ({
+//         ...x,
+//         product: x._id,
+//       }));
+//       await user.save();
+//       res.send({ message: "Shopping Cart Added" });
+//     } else {
+//       res.status(404).send({ message: "User Not Found" });
+//     }
+//   })
+// );
+
+userRouter.put(
+  "/addcart",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.cartItems = req.body.cartItems.map((x) => ({
+        ...x,
+        product: x._id,
+      }));
+      await user.save();
+      res.send({ message: "Shopping Cart Added" });
+    } else {
+      res.status(404).send({ message: "User Not Found" });
+    }
+  })
+);
+
+// userRouter.delete(
+//   "/clearcart",
+//   isAuth,
+//   expressAsyncHandler(async (req, res) => {
+//     const user = await User.findById(req.user._id);
+//     if (user) {
+//       user.cartItems = [];
+//       await user.save();
+//       res.send({ message: "Shopping Cart Cleared" });
+//     } else {
+//       res.status(404).send({ message: "User Not Found" });
+//     }
+//   })
+// );
 
 export default userRouter;

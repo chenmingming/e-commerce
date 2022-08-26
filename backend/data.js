@@ -3,14 +3,20 @@ import bcrypt from "bcryptjs";
 const data = {
   users: [
     {
-      name: "Basir",
-      email: "admin@example.com",
+      name: "Admin",
+      email: "admin@gmail.com",
       password: bcrypt.hashSync("123456"),
       isAdmin: true,
     },
     {
-      name: "John",
-      email: "user@example.com",
+      name: "Mingming",
+      email: "mingming@gmail.com",
+      password: bcrypt.hashSync("123456"),
+      isAdmin: true,
+    },
+    {
+      name: "Miles",
+      email: "mileschen2008@gmail.com",
       password: bcrypt.hashSync("123456"),
       isAdmin: false,
     },
@@ -28,6 +34,7 @@ const data = {
       rating: 4.5,
       numReviews: 10,
       description: "high quality shirt",
+      user: "6303c187aece60e73f7ee47e",
     },
     {
       // _id: "2",
@@ -41,6 +48,7 @@ const data = {
       rating: 4.0,
       numReviews: 10,
       description: "high quality product",
+      user: "6303c187aece60e73f7ee47e",
     },
     {
       // _id: "3",
@@ -54,6 +62,7 @@ const data = {
       rating: 4.5,
       numReviews: 14,
       description: "high quality product",
+      user: "6303c187aece60e73f7ee47f",
     },
     {
       // _id: "4",
@@ -67,6 +76,7 @@ const data = {
       rating: 4.5,
       numReviews: 10,
       description: "high quality product",
+      user: "6303c187aece60e73f7ee47f",
     },
   ],
 };

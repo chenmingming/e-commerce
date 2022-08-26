@@ -13,31 +13,23 @@ import Button from "react-bootstrap/Button";
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true };
-    case "FETCH_SUCCESS":
+    case "CREATE_REQUEST":
       return { ...state, loading: false };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
-    case "UPDATE_REQUEST":
-      return { ...state, loadingUpdate: true };
-    case "UPDATE_SUCCESS":
-      return { ...state, loadingUpdate: false };
-    case "UPDATE_FAIL":
-      return { ...state, loadingUpdate: false };
+    case "CREATE_SUCCESS":
+      return { ...state, loading: false };
+    case "CREATE_FAIL":
+      return { ...state, loading: false };
     default:
       return state;
   }
 };
-export default function ProductEditScreen() {
+export default function ProductCreateScreen() {
   const navigate = useNavigate();
-  const params = useParams(); // /product/:id
-  const { id: productId } = params;
 
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
-    loading: true,
+  const [{ loading, error }, dispatch] = useReducer(reducer, {
+    loading: false,
     error: "",
   });
 
@@ -50,38 +42,13 @@ export default function ProductEditScreen() {
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/product/${productId}`);
-        setName(data.name);
-        setSlug(data.slug);
-        setPrice(data.price);
-        setImage(data.image);
-        setCategory(data.category);
-        setCountInStock(data.countInStock);
-        setBrand(data.brand);
-        setDescription(data.description);
-        dispatch({ type: "FETCH_SUCCESS" });
-      } catch (err) {
-        dispatch({
-          type: "FETCH_FAIL",
-          payload: getError(err),
-        });
-      }
-    };
-    fetchData();
-  }, [productId]);
-
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      dispatch({ type: "UPDATE_REQUEST" });
-      await axios.put(
-        `/api/product/${productId}`,
+      dispatch({ type: "CREATE_REQUEST" });
+      await axios.post(
+        "/api/product/create",
         {
-          _id: productId,
           name,
           slug,
           price,
@@ -96,22 +63,22 @@ export default function ProductEditScreen() {
         }
       );
       dispatch({
-        type: "UPDATE_SUCCESS",
+        type: "CREATE_SUCCESS",
       });
-      toast.success("Product updated successfully");
+      toast.success("Product created successfully");
       navigate("/");
     } catch (err) {
       toast.error(getError(err));
-      dispatch({ type: "UPDATE_FAIL" });
+      dispatch({ type: "CREATE_FAIL" });
     }
   };
 
   return (
     <Container className="small-container">
       <Helmet>
-        <title>Edit Product</title>
+        <title>Create Product</title>
       </Helmet>
-      <h1>Edit Product {name}</h1>
+      <h1>Create Product</h1>
 
       {loading ? (
         <LoadingBox></LoadingBox>
@@ -184,10 +151,10 @@ export default function ProductEditScreen() {
             />
           </Form.Group>
           <div className="mb-3">
-            <Button disabled={loadingUpdate} type="submit">
-              Update
+            <Button disabled={loading} type="submit">
+              Create
             </Button>
-            {loadingUpdate && <LoadingBox></LoadingBox>}
+            {loading && <LoadingBox></LoadingBox>}
           </div>
         </Form>
       )}
